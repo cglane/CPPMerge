@@ -1,0 +1,1 @@
+cmd_Release/merge.node := c++ -bundle -stdlib=libc++ -undefined dynamic_lookup -Wl,-search_paths_first -mmacosx-version-min=10.7 -arch x86_64 -L./Release  -o Release/merge.node Release/obj.target/merge/merge.o Release/obj.target/merge/merge_node.o 
