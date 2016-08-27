@@ -7,9 +7,7 @@ that would take a multidemensional javascript, pass it to the C++ plugin, have a
 array returned.
 Great activity to get a better understanding of V8 classes and great opportunity to use two different languages on 
 one project
-## Installation
 
-TODO: git fetch origin 
 
 ## Usage
 
