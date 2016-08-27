@@ -16,7 +16,11 @@ trans merge (trans &a, trans & b){
 
 	return trans(lang, num);
 }
-
+/**
+Iterates through both 'terms' and if they have
+matching keys returns merged 'term' giving preference
+to b values
+*/
 term merge_terms(term &a, term &b){
 	//merge a and b give preference for b
 	term result;
@@ -38,6 +42,11 @@ term merge_terms(term &a, term &b){
 	return result;
 }
 
+/**
+Iterates though large set of 'terms' using pre-defined
+merge function
+*/
+
 void merge_nested(vector<term> & a, vector<term> &b, vector<term> &mergedArr,size_t interval){
 	bool matchedKey = true;
 	for(size_t i = 0; i < b.size(); i++){
@@ -54,6 +63,9 @@ void merge_nested(vector<term> & a, vector<term> &b, vector<term> &mergedArr,siz
 	if(++interval < a.size())merge_nested(a, b, mergedArr, interval);
 	else return;
 }
+
+/**Merges nested arrays within objects returning map of merged arrays*/
+
 void map_values(vector<term> &a, vector<term>&b, map<string, int> &myMap, size_t interval){
 	bool matchedKey = true;
 	bool matchedLang = true;

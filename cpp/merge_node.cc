@@ -11,6 +11,8 @@
 #include <map>
 using namespace v8;
 
+/**Instantiate Functions**/
+
 term unpack_term(Isolate * , const Handle<Object> sample_term);
 trans unpack_trans(Isolate * , const Handle<Object> sample_trans);
 void pack_term_result(v8::Isolate * isolate, v8::Local<v8::Object> &target, term & localTerm);
@@ -18,6 +20,8 @@ void pack_translation_result(v8::Isolate * isolate, v8::Local<v8::Object> &targe
 void merge_nested(vector<term> &a, vector<term>&b,vector<term>&mergedArr, size_t interval);
 void pack_map_result(v8::Isolate *isolate, v8::Local<v8::Object> &target, map<string,int> &myMap);
 void map_values(vector<term> &a, vector<term>&b, map<string,int>&myMap, size_t interval);
+
+/**Handling NodeJS values*/
 
 trans unpack_trans(Isolate * isolate, const Handle<Object> trans_obj){
   trans local_trans;
@@ -46,6 +50,9 @@ term unpack_term(Isolate *isolate, const Handle<Object> term_obj){
   }
   return localTerm;
 }
+
+/**Packaging values to be returned to NodeJS*/
+
 void pack_map_result(v8::Isolate* isolate, v8::Local<v8::Object>&target, map<string,int>& myMap){
   for(auto &&keyVal : myMap){
     std::string key(keyVal.first);
@@ -71,6 +78,9 @@ void pack_term_result(v8::Isolate* isolate, v8::Local<v8::Object> &target, term 
   target->Set(String::NewFromUtf8(isolate,"translations"), transArray);
 }
 
+/**Functions*/
+
+/***/
 void MergeTerms( const v8::FunctionCallbackInfo<v8::Value> &args){
   Isolate* isolate = args.GetIsolate();
   term termA = unpack_term(isolate, Handle<Object>::Cast(args[0]));
@@ -124,6 +134,7 @@ void MapTranslations(const v8::FunctionCallbackInfo<v8::Value> &args){
   //Handle Two Arrays
   Handle<Array> arrA = Handle<Array>::Cast(args[0]);
   Handle<Array> arrB = Handle<Array>::Cast(args[1]);
+  //Unpacking Array A and Array B
   for( unsigned int i = 0; i< arrA->Length(); i++){
     Local<Value> element = arrA->Get(i);
     if(element->IsObject()){
@@ -138,14 +149,16 @@ void MapTranslations(const v8::FunctionCallbackInfo<v8::Value> &args){
         special.push_back(unpack_term(isolate, b));
     }
   }
+  //Mapping and merg nested arrays within objects
   map<string,int> myMap;
   size_t interval = 0;
   map_values(standard, special, myMap, interval);
-
+  //Pack and return results
   Local<Object> rtnObj = Object::New(isolate);
   pack_map_result(isolate,rtnObj,myMap);
   args.GetReturnValue().Set(rtnObj);
 }
+  //Instantiate plugin methods
 void init(Handle <Object> exports, Handle<Object> module) {
     NODE_SET_METHOD(exports, "merge_terms", MergeTerms);
     NODE_SET_METHOD(exports, "merge_nested", MergeNestedTerms);

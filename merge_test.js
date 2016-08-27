@@ -46,7 +46,7 @@ var termArr = [
     ]
   },
   {
-    key: 'he',
+    key: 'she',
     val: 7,
     translations:[
       {
@@ -91,9 +91,5 @@ var termArr2 = [
   }
 ]
 
-// var results = merge.merge_terms(term1,term2);
-// var bigMerge = merge.merge_nested(termArr, termArr2);
-// console.log(bigMerge,'bigMerge');
-// console.log(bigMerge[0].translations,'translations');
-var result = merge.map_values(termArr,termArr2);
+var result = merge.merge_nested(termArr,termArr2);
 console.log(result,'result');
